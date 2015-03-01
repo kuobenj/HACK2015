@@ -20,6 +20,9 @@ function fetchWeather(latitude, longitude) {
       if(req.status == 200) {
         console.log(req.responseText);
 
+        
+        
+    
         var response = JSON.parse(req.responseText);
         var temperature = Math.round(response.main.temp - 273.15);
         var icon = iconFromWeatherId(response.weather[0].id);
@@ -27,6 +30,8 @@ function fetchWeather(latitude, longitude) {
         console.log(temperature);
         console.log(icon);
         console.log(city);
+        console.log(latitude);
+        console.log(longitude);
         Pebble.sendAppMessage({
           "WEATHER_ICON_KEY":icon,
           "WEATHER_TEMPERATURE_KEY":temperature + "\u00B0C",
@@ -43,7 +48,9 @@ function fetchWeather(latitude, longitude) {
 
 function locationSuccess(pos) {
   var coordinates = pos.coords;
-  fetchWeather(coordinates.latitude, coordinates.longitude);
+  var myVar=setInterval(function () {fetchWeather(coordinates.latitude, coordinates.longitude)}, 1000);
+
+  ;
 }
 
 function locationError(err) {
@@ -63,7 +70,9 @@ Pebble.addEventListener("ready", function(e) {
 });
 
 Pebble.addEventListener("appmessage", function(e) {
-  window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
+    var myVar=setInterval(function () {window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);}, 1000);
+
+  //window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
   console.log(e.type);
   console.log(e.payload.temperature);
   console.log("message!");
