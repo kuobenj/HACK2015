@@ -11,15 +11,20 @@ static char test[25];
 static BitmapLayer *icon_layer;
 static GBitmap *icon_bitmap = NULL;
 
+static WakeupId wakeup_id;
+
 static AppSync sync;
 static uint8_t sync_buffer[64];
 
 char strings[10][50] = {
-  "Encountered a wild Gengar!",
-  "Can't touch this... dun na na na",
+  "Encountered a wild Pokemon!",
+  "Can't touch this...\ndun na na na",
   "Fuck Yeah",
-  "i know where u live"
+  "i know where u live",
+  "HackIllinois\n2015"
 };
+
+static int stringSize = 5;
 
 enum displayKeys {
   SPRITE_KEY = 0x0,         // TUPLE_INT
@@ -29,10 +34,15 @@ enum displayKeys {
 
 static uint32_t picIcons[] = {
   RESOURCE_ID_gengar,
-  RESOURCE_ID_gengar,
+  RESOURCE_ID_jolteon,
   RESOURCE_ID_bulbasaur,
-  RESOURCE_ID_shaymin
+  RESOURCE_ID_shaymin,
+  RESOURCE_ID_pigeot,
+  RESOURCE_ID_typh,
+  RESOURCE_ID_cloyster
 };
+
+static int picSize = 7;
 
 static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message Sync Error: %d", app_message_error);
@@ -65,6 +75,7 @@ static void window_load(Window *window) {
 
   // icon_layer = bitmap_layer_create(GRect(72, 0, 72, 84));
   icon_layer = bitmap_layer_create(GRect(72, 0, 80, 84));
+  bitmap_layer_set_background_color(icon_layer, GColorWhite);
   layer_add_child(window_layer, bitmap_layer_get_layer(icon_layer));
 
   // encounter_layer = text_layer_create(GRect(0, 80, 144, 25));
@@ -110,7 +121,36 @@ static void window_unload(Window *window) {
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(encounter_layer, strings[rand()%4]);
+  text_layer_set_text(encounter_layer, strings[rand()%stringSize]);
+  
+  if (icon_bitmap) {
+    gbitmap_destroy(icon_bitmap);
+  }
+    
+  icon_bitmap = gbitmap_create_with_resource(picIcons[rand()%picSize]);
+  bitmap_layer_set_bitmap(icon_layer, icon_bitmap);
+}
+
+static void wakeup_handler(WakeupId id, int32_t reason) {
+  // The app has woken!
+  text_layer_set_text(encounter_layer, strings[rand()%stringSize]);
+  
+  if (icon_bitmap) {
+    gbitmap_destroy(icon_bitmap);
+  }
+
+  vibes_double_pulse();
+    
+  icon_bitmap = gbitmap_create_with_resource(picIcons[rand()%picSize]);
+  bitmap_layer_set_bitmap(icon_layer, icon_bitmap);
+
+  uint8_t newtime = (rand() % 15)+10;
+  time_t future_time = time(NULL) + newtime;
+    
+  wakeup_id = wakeup_schedule(future_time, 0, true);
+  persist_write_int(42, wakeup_id);
+  // Delete the ID
+  persist_delete(42);
 }
 
 static void click_config_provider(void *context) {
@@ -131,6 +171,9 @@ static void init() {
   
   window_set_click_config_provider(window, click_config_provider);
 
+  wakeup_service_subscribe(wakeup_handler);
+       //NEED GET LAUNCH QUERY????
+  //wakeup_handler((WakeupId)0, (int32_t)0);
   // const int inbound_size = 64;
   // const int outbound_size = 16;
   // app_message_open(inbound_size, outbound_size);

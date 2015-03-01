@@ -10,8 +10,28 @@
     "resources": {
         "media": [
             {
-                "file": "images/bulbasaur.png",
-                "name": "bulbasaur",
+                "file": "images/cloyster.png",
+                "name": "cloyster",
+                "type": "png"
+            },
+            {
+                "file": "images/pigeot.png",
+                "name": "pigeot",
+                "type": "png"
+            },
+            {
+                "file": "images/typh.png",
+                "name": "typh",
+                "type": "png"
+            },
+            {
+                "file": "images/jolteon.png",
+                "name": "jolteon",
+                "type": "png"
+            },
+            {
+                "file": "images/gengar.png",
+                "name": "gengar",
                 "type": "png"
             },
             {
@@ -21,8 +41,8 @@
                 "type": "png"
             },
             {
-                "file": "images/gengar.png",
-                "name": "gengar",
+                "file": "images/bulbasaur.png",
+                "name": "bulbasaur",
                 "type": "png"
             }
         ]
