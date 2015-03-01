@@ -1,17 +1,18 @@
 {
     "appKeys": {},
     "capabilities": [
-        ""
+        "location",
+        "configurable"
     ],
     "companyName": "kuobenj@gmail.com",
-    "longName": "WAKEY",
+    "longName": "POKEMON",
     "projectType": "native",
     "resources": {
         "media": []
     },
     "sdkVersion": "2",
-    "shortName": "WAKEY",
-    "uuid": "482cfb07-d9e1-4b88-9bd0-f125bfcbd611",
+    "shortName": "POKEMON",
+    "uuid": "724d277f-fa75-4f12-b6fd-3e2f1cf0de53",
     "versionCode": 1,
     "versionLabel": "1.0",
     "watchapp": {
