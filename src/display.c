@@ -1,113 +1,129 @@
-// #include "pebble.h"
+#include "pebble.h"
 
-// static Window *window;
+static Window *window;
 
-// static TextLayer *temperature_layer;
-// static char temperature[16];
+static TextLayer *encounter_layer;
+static char temperature[25];
 
-// static BitmapLayer *icon_layer;
-// static GBitmap *icon_bitmap = NULL;
+static TextLayer *name_layer;
+static char test[25];
 
-// static AppSync sync;
-// static uint8_t sync_buffer[32];
+static BitmapLayer *icon_layer;
+static GBitmap *icon_bitmap = NULL;
 
-// enum WeatherKey {
-//   WEATHER_ICON_KEY = 0x0,         // TUPLE_INT
-//   WEATHER_TEMPERATURE_KEY = 0x1,  // TUPLE_CSTRING
-//   NEXT = 0x2,
-// };
+static AppSync sync;
+static uint8_t sync_buffer[64];
 
-// static uint32_t WEATHER_ICONS[] = {
-//   RESOURCE_ID_bulbasaur,
-//   RESOURCE_ID_bulbasaur,
-//   RESOURCE_ID_bulbasaur,
-//   RESOURCE_ID_bulbasaur
-// };
+enum displayKeys {
+  SPRITE_KEY = 0x0,         // TUPLE_INT
+  ENCOUNTER_KEY = 0x1,  // TUPLE_CSTRING
+  NAME_KEY = 0x2,
+};
 
-// static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
-//   APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message Sync Error: %d", app_message_error);
-// }
+static uint32_t picIcons[] = {
+  RESOURCE_ID_gengar,
+  RESOURCE_ID_gengar,
+  RESOURCE_ID_bulbasaur,
+  RESOURCE_ID_shaymin
+};
 
-// static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tuple, const Tuple* old_tuple, void* context) {
-//   switch (key) {
-//     case WEATHER_ICON_KEY:
-//       if (icon_bitmap) {
-//         gbitmap_destroy(icon_bitmap);
-//       }
+static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message Sync Error: %d", app_message_error);
+}
 
-//       icon_bitmap = gbitmap_create_with_resource(WEATHER_ICONS[new_tuple->value->uint8]);
-//       bitmap_layer_set_bitmap(icon_layer, icon_bitmap);
-//       break;
+static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tuple, const Tuple* old_tuple, void* context) {
+  switch (key) {
+    case SPRITE_KEY:
+      if (icon_bitmap) {
+        gbitmap_destroy(icon_bitmap);
+      }
 
-//     case WEATHER_TEMPERATURE_KEY:
-//       // App Sync keeps new_tuple in sync_buffer, so we may use it directly
-//       text_layer_set_text(temperature_layer, new_tuple->value->cstring);
-//       break;
+      icon_bitmap = gbitmap_create_with_resource(picIcons[new_tuple->value->uint8]);
+      bitmap_layer_set_bitmap(icon_layer, icon_bitmap);
+      break;
+
+    case ENCOUNTER_KEY:
+      // App Sync keeps new_tuple in sync_buffer, so we may use it directly
+      text_layer_set_text(encounter_layer, new_tuple->value->cstring);
+      break;
       
-//     case NEXT:
-//       text_layer_set_text(name_layer, new_tuple->value->cstring);
-//       break;
-//   }
-// }
+    case NAME_KEY:
+      text_layer_set_text(name_layer, new_tuple->value->cstring);
+      break;
+  }
+}
 
-// static void window_load(Window *window) {
-//   Layer *window_layer = window_get_root_layer(window);
+static void window_load(Window *window) {
+  Layer *window_layer = window_get_root_layer(window);
 
-//   icon_layer = bitmap_layer_create(GRect(72, 0, 72, 84));
-//   layer_add_child(window_layer, bitmap_layer_get_layer(icon_layer));
+  // icon_layer = bitmap_layer_create(GRect(72, 0, 72, 84));
+  icon_layer = bitmap_layer_create(GRect(72, 0, 80, 84));
+  layer_add_child(window_layer, bitmap_layer_get_layer(icon_layer));
 
-//   temperature_layer = text_layer_create(GRect(0, 100, 144, 68));
-//   text_layer_set_text_color(temperature_layer, GColorWhite);
-//   text_layer_set_background_color(temperature_layer, GColorClear);
-//   //text_layer_set_font(temperature_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
-//   text_layer_set_text_alignment(temperature_layer, GTextAlignmentCenter);
-//   text_layer_set_text(temperature_layer, temperature);
+  // encounter_layer = text_layer_create(GRect(0, 80, 144, 25));
+  encounter_layer = text_layer_create(GRect(0, 80, 100, 50));
+  text_layer_set_text_color(encounter_layer, GColorBlack);
+  text_layer_set_background_color(encounter_layer, GColorWhite);
+  //text_layer_set_font(encounter_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+  text_layer_set_text_alignment(encounter_layer, GTextAlignmentCenter);
+  text_layer_set_text(encounter_layer, temperature);
+  text_layer_set_overflow_mode(encounter_layer, GTextOverflowModeWordWrap);
+  layer_add_child(window_layer, text_layer_get_layer(encounter_layer));
 
-//   Tuplet initial_values[] = {
-//     TupletInteger(WEATHER_ICON_KEY, (uint8_t) 1),
-//     TupletCString(WEATHER_TEMPERATURE_KEY, "Encountered a"),
-//     TupletCString(NEXT, "wild Bulbasaur!"),
-//   };
-//   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
-//       sync_tuple_changed_callback, sync_error_callback, NULL);
+  // name_layer = text_layer_create(GRect(0, 125, 144, 25));
+  name_layer = text_layer_create(GRect(0, 150, 130, 25));
+  text_layer_set_text_color(name_layer, GColorWhite);
+  text_layer_set_background_color(name_layer, GColorWhite);
+  //text_layer_set_font(name_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+  text_layer_set_text_alignment(name_layer, GTextAlignmentCenter);
+  text_layer_set_text(name_layer, test);
+  layer_add_child(window_layer, text_layer_get_layer(name_layer));
 
-//   layer_add_child(window_layer, text_layer_get_layer(temperature_layer));
-// }
+  Tuplet initial_values[] = {
+    TupletInteger(SPRITE_KEY, (uint8_t) 0),
+    TupletCString(ENCOUNTER_KEY, "Encountered a wild Gengar!"),
+    TupletCString(NAME_KEY, "suuuup"),
+  };
+  app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
+      sync_tuple_changed_callback, sync_error_callback, NULL);
 
-// static void window_unload(Window *window) {
-//   app_sync_deinit(&sync);
+}
 
-//   if (icon_bitmap) {
-//     gbitmap_destroy(icon_bitmap);
-//   }
+static void window_unload(Window *window) {
+  app_sync_deinit(&sync);
 
-//   text_layer_destroy(temperature_layer);
-//   bitmap_layer_destroy(icon_layer);
-// }
+  if (icon_bitmap) {
+    gbitmap_destroy(icon_bitmap);
+  }
 
-// static void init() {
-//   window = window_create();
-//   window_set_background_color(window, GColorBlack);
-//   window_set_fullscreen(window, true);
-//   window_set_window_handlers(window, (WindowHandlers) {
-//     .load = window_load,
-//     .unload = window_unload
-//   });
+  text_layer_destroy(name_layer);
+  text_layer_destroy(encounter_layer);
+  bitmap_layer_destroy(icon_layer);
+}
 
-//   const int inbound_size = 64;
-//   const int outbound_size = 16;
-//   app_message_open(inbound_size, outbound_size);
+static void init() {
+  window = window_create();
+  window_set_background_color(window, GColorClear);
+  window_set_fullscreen(window, true);
+  window_set_window_handlers(window, (WindowHandlers) {
+    .load = window_load,
+    .unload = window_unload
+  });
 
-//   const bool animated = true;
-//   window_stack_push(window, animated);
-// }
+  // const int inbound_size = 64;
+  // const int outbound_size = 16;
+  // app_message_open(inbound_size, outbound_size);
 
-// static void deinit() {
-//   window_destroy(window);
-// }
+  const bool animated = true;
+  window_stack_push(window, animated);
+}
 
-// int main(void) {
-//   init();
-//   app_event_loop();
-//   deinit();
-// }
+static void deinit() {
+  window_destroy(window);
+}
+
+int main(void) {
+  init();
+  app_event_loop();
+  deinit();
+}
