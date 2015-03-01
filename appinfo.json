@@ -5,51 +5,55 @@
         "configurable"
     ],
     "companyName": "kuobenj@gmail.com",
-    "longName": "Hey...",
+    "longName": "THE BIG MESS",
     "projectType": "native",
     "resources": {
         "media": [
             {
-                "file": "images/cloyster.png",
-                "name": "cloyster",
-                "type": "png"
-            },
-            {
-                "file": "images/pigeot.png",
-                "name": "pigeot",
-                "type": "png"
+                "file": "images/Converted_file_f559824c.png",
+                "name": "kinman",
+                "type": "png-trans"
             },
             {
                 "file": "images/typh.png",
                 "name": "typh",
-                "type": "png"
+                "type": "png-trans"
+            },
+            {
+                "file": "images/shaymin.png",
+                "name": "shaymin",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/pigeot.png",
+                "name": "pigeot",
+                "type": "png-trans"
             },
             {
                 "file": "images/jolteon.png",
                 "name": "jolteon",
-                "type": "png"
+                "type": "png-trans"
             },
             {
                 "file": "images/gengar.png",
                 "name": "gengar",
-                "type": "png"
+                "type": "png-trans"
             },
             {
-                "file": "images/shaymin.png",
-                "menuIcon": true,
-                "name": "shaymin",
-                "type": "png"
+                "file": "images/cloyster.png",
+                "name": "cloyster",
+                "type": "png-trans"
             },
             {
-                "file": "images/bulbasaur.png",
-                "name": "bulbasaur",
-                "type": "png"
+                "file": "images/vulpix.png",
+                "name": "vulpix",
+                "type": "png-trans"
             }
         ]
     },
     "sdkVersion": "2",
-    "shortName": "Hey...",
-    "uuid": "724d277f-fa75-4f12-b6fd-3e2f1cf0de53",
+    "shortName": "THE BIG MESS",
+    "uuid": "1667dafa-a1a3-4bc0-9c51-8192bbfea027",
     "versionCode": 1,
     "versionLabel": "1.0",
     "watchapp": {
