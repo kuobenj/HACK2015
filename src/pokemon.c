@@ -21,8 +21,8 @@ enum WeatherKey {
 };
 
 static uint32_t WEATHER_ICONS[] = {
-  RESOURCE_ID_gengar,
-  RESOURCE_ID_gengar,
+  RESOURCE_ID_bulbasaur,
+  //RESOURCE_ID_shaymin,
   RESOURCE_ID_bulbasaur,
   RESOURCE_ID_shaymin
 };
@@ -56,37 +56,33 @@ static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tup
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
 
-  // icon_layer = bitmap_layer_create(GRect(72, 0, 72, 84));
-  icon_layer = bitmap_layer_create(GRect(72, 0, 80, 84));
+  icon_layer = bitmap_layer_create(GRect(72, 0, 72, 84));
   layer_add_child(window_layer, bitmap_layer_get_layer(icon_layer));
 
-  // encounter_layer = text_layer_create(GRect(0, 80, 144, 25));
-  encounter_layer = text_layer_create(GRect(0, 80, 100, 25));
+  encounter_layer = text_layer_create(GRect(0, 80, 144, 25));
   text_layer_set_text_color(encounter_layer, GColorBlack);
   text_layer_set_background_color(encounter_layer, GColorWhite);
   //text_layer_set_font(encounter_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   text_layer_set_text_alignment(encounter_layer, GTextAlignmentCenter);
   text_layer_set_text(encounter_layer, temperature);
-  text_layer_set_overflow_mode(encounter_layer, GTextOverflowModeWordWrap);
-  layer_add_child(window_layer, text_layer_get_layer(encounter_layer));
 
-  // name_layer = text_layer_create(GRect(0, 125, 144, 25));
-  name_layer = text_layer_create(GRect(0, 125, 130, 25));
+  name_layer = text_layer_create(GRect(0, 125, 144, 25));
   text_layer_set_text_color(name_layer, GColorWhite);
   text_layer_set_background_color(name_layer, GColorWhite);
   //text_layer_set_font(name_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   text_layer_set_text_alignment(name_layer, GTextAlignmentCenter);
   text_layer_set_text(name_layer, test);
-  layer_add_child(window_layer, text_layer_get_layer(name_layer));
 
   Tuplet initial_values[] = {
-    TupletInteger(SPRITE_KEY, (uint8_t) 0),
+    TupletInteger(SPRITE_KEY, (uint8_t) 1),
     TupletCString(ENCOUNTER_KEY, "Fuck You"),
     //TupletCString(NAME_KEY, "wild"),
   };
   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
       sync_tuple_changed_callback, sync_error_callback, NULL);
 
+  layer_add_child(window_layer, text_layer_get_layer(encounter_layer));
+  layer_add_child(window_layer, text_layer_get_layer(name_layer));
 }
 
 static void window_unload(Window *window) {
@@ -96,8 +92,8 @@ static void window_unload(Window *window) {
     gbitmap_destroy(icon_bitmap);
   }
 
-  text_layer_destroy(name_layer);
   text_layer_destroy(encounter_layer);
+  text_layer_destroy(name_layer);
   bitmap_layer_destroy(icon_layer);
 }
 
@@ -110,9 +106,9 @@ static void init() {
     .unload = window_unload
   });
 
-  // const int inbound_size = 64;
-  // const int outbound_size = 16;
-  // app_message_open(inbound_size, outbound_size);
+  const int inbound_size = 64;
+  const int outbound_size = 16;
+  app_message_open(inbound_size, outbound_size);
 
   const bool animated = true;
   window_stack_push(window, animated);

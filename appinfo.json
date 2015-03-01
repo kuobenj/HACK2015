@@ -5,18 +5,12 @@
         "configurable"
     ],
     "companyName": "kuobenj@gmail.com",
-    "longName": "Hey...",
+    "longName": "POKEMON",
     "projectType": "native",
     "resources": {
         "media": [
             {
-                "file": "images/gengar.png",
-                "name": "gengar",
-                "type": "png"
-            },
-            {
                 "file": "images/shaymin.png",
-                "menuIcon": true,
                 "name": "shaymin",
                 "type": "png"
             },
@@ -28,7 +22,7 @@
         ]
     },
     "sdkVersion": "2",
-    "shortName": "Hey...",
+    "shortName": "POKEMON",
     "uuid": "724d277f-fa75-4f12-b6fd-3e2f1cf0de53",
     "versionCode": 1,
     "versionLabel": "1.0",
