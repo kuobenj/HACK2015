@@ -24,7 +24,9 @@ void window_load(Window *window) {
   
     // Create image layer
   s_image_layer =  bitmap_layer_create(GRect(0, 0, window_bounds.size.w, window_bounds.size.h));
-  //figure out image specifics here
+  bitmap_layer_set_background_color(s_image_layer, GColorClear);
+  bitmap_layer_set_compositing_mode(s_image_layer, GCompOpClear);
+  layer_add_child(window_layer, bitmap_layer_get_layer(s_image_layer));
 }
 static void window_unload(Window *window) {
   // Destroy output TextLayer

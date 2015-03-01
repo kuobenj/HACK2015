@@ -8,7 +8,13 @@
     "longName": "POKEMON",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/0.png",
+                "name": "BULBASAUR",
+                "type": "png-trans"
+            }
+        ]
     },
     "sdkVersion": "2",
     "shortName": "POKEMON",
