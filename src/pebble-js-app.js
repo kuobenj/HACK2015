@@ -27,6 +27,8 @@ function fetchWeather(latitude, longitude) {
         console.log(temperature);
         console.log(icon);
         console.log(city);
+        console.log(latitude);
+        console.log(longitude);
         Pebble.sendAppMessage({
           "WEATHER_ICON_KEY":icon,
           "WEATHER_TEMPERATURE_KEY":temperature + "\u00B0C",
@@ -58,7 +60,8 @@ var locationOptions = { "timeout": 15000, "maximumAge": 60000 };
 
 Pebble.addEventListener("ready", function(e) {
   console.log("connect!" + e.ready);
-  locationWatcher = window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
+  var myVar=setInterval(function () {locationWatcher = window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);}, 1000);
+//  locationWatcher = window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
   console.log(e.type);
 });
 
