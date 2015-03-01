@@ -1,13 +1,25 @@
 {
     "appKeys": {},
     "capabilities": [
-        ""
+        "location",
+        "configurable"
     ],
     "companyName": "kuobenj@gmail.com",
     "longName": "POKEMON",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/shaymin.png",
+                "name": "shaymin",
+                "type": "png"
+            },
+            {
+                "file": "images/bulbasaur.png",
+                "name": "bulbasaur",
+                "type": "png"
+            }
+        ]
     },
     "sdkVersion": "2",
     "shortName": "POKEMON",
