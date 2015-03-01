@@ -20,9 +20,6 @@ function fetchWeather(latitude, longitude) {
       if(req.status == 200) {
         console.log(req.responseText);
 
-        
-        
-    
         var response = JSON.parse(req.responseText);
         var temperature = Math.round(response.main.temp - 273.15);
         var icon = iconFromWeatherId(response.weather[0].id);
@@ -48,9 +45,7 @@ function fetchWeather(latitude, longitude) {
 
 function locationSuccess(pos) {
   var coordinates = pos.coords;
-  var myVar=setInterval(function () {fetchWeather(coordinates.latitude, coordinates.longitude)}, 1000);
-
-  ;
+  fetchWeather(coordinates.latitude, coordinates.longitude);
 }
 
 function locationError(err) {
@@ -65,14 +60,13 @@ var locationOptions = { "timeout": 15000, "maximumAge": 60000 };
 
 Pebble.addEventListener("ready", function(e) {
   console.log("connect!" + e.ready);
-  locationWatcher = window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
+  var myVar=setInterval(function () {locationWatcher = window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);}, 1000);
+//  locationWatcher = window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
   console.log(e.type);
 });
 
 Pebble.addEventListener("appmessage", function(e) {
-    var myVar=setInterval(function () {window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);}, 1000);
-
-  //window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
+  window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
   console.log(e.type);
   console.log(e.payload.temperature);
   console.log("message!");

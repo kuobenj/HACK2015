@@ -12,7 +12,7 @@ static BitmapLayer *icon_layer;
 static GBitmap *icon_bitmap = NULL;
 
 static AppSync sync;
-static uint8_t sync_buffer[32];
+static uint8_t sync_buffer[64];
 
 enum WeatherKey {
   SPRITE_KEY = 0x0,         // TUPLE_INT
@@ -81,7 +81,7 @@ static void window_load(Window *window) {
 
   Tuplet initial_values[] = {
     TupletInteger(SPRITE_KEY, (uint8_t) 0),
-    TupletCString(ENCOUNTER_KEY, "Fuck You"),
+    TupletCString(ENCOUNTER_KEY, "Fuck Youa s s s d d s s s s s s"),
     //TupletCString(NAME_KEY, "wild"),
   };
   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
