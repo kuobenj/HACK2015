@@ -18,10 +18,12 @@ enum WeatherKey {
 };
 
 static const uint32_t WEATHER_ICONS[] = {
-//  RESOURCE_ID_IMAGE_SUN, //0
-//  RESOURCE_ID_IMAGE_CLOUD, //1
-//  RESOURCE_ID_IMAGE_RAIN, //2
-//  RESOURCE_ID_IMAGE_SNOW //3
+    //  RESOURCE_ID_IMAGE_SUN, //0
+    //  RESOURCE_ID_IMAGE_CLOUD, //1
+    //  RESOURCE_ID_IMAGE_RAIN, //2
+    //  RESOURCE_ID_IMAGE_SNOW //3
+  RESOURCE_ID_BULBASAUR_BLACK,
+  RESOURCE_ID_BULBASAUR_WHITE 
 };
 
 static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
@@ -35,7 +37,7 @@ static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tup
         gbitmap_destroy(s_icon_bitmap);
       }
 
-//      s_icon_bitmap = gbitmap_create_with_resource(WEATHER_ICONS[new_tuple->value->uint8]);
+      s_icon_bitmap = gbitmap_create_with_resource(WEATHER_ICONS[new_tuple->value->uint8]);
       bitmap_layer_set_bitmap(s_icon_layer, s_icon_bitmap);
       break;
 
@@ -70,26 +72,28 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  s_icon_layer = bitmap_layer_create(GRect(32, 10, 80, 80));
+  s_icon_layer = bitmap_layer_create(GRect(32, 5, 80, 80));
+  bitmap_layer_set_background_color(s_icon_layer, GColorClear);
+  bitmap_layer_set_compositing_mode(s_icon_layer, GCompOpClear);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_icon_layer));
 
   s_temperature_layer = text_layer_create(GRect(0, 75, bounds.size.w, 68));
-  text_layer_set_text_color(s_temperature_layer, GColorWhite);
-  text_layer_set_background_color(s_temperature_layer, GColorClear);
-  text_layer_set_font(s_temperature_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+  text_layer_set_text_color(s_temperature_layer, GColorBlack);
+  text_layer_set_background_color(s_temperature_layer, GColorWhite);
+  text_layer_set_font(s_temperature_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
   text_layer_set_text_alignment(s_temperature_layer, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(s_temperature_layer));
 
-  s_city_layer = text_layer_create(GRect(0, 105, bounds.size.w, 68));
-  text_layer_set_text_color(s_city_layer, GColorWhite);
-  text_layer_set_background_color(s_city_layer, GColorClear);
-  text_layer_set_font(s_city_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+  s_city_layer = text_layer_create(GRect(0, 120, bounds.size.w, 68));
+  text_layer_set_text_color(s_city_layer, GColorBlack);
+  text_layer_set_background_color(s_city_layer, GColorWhite);
+  text_layer_set_font(s_city_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
   text_layer_set_text_alignment(s_city_layer, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(s_city_layer));
 
   Tuplet initial_values[] = {
-    TupletInteger(WEATHER_ICON_KEY, (uint8_t) 1),
-    TupletCString(WEATHER_TEMPERATURE_KEY, "1234\u00B0C"),
+    TupletInteger(WEATHER_ICON_KEY, (uint8_t) 0),
+    TupletCString(WEATHER_TEMPERATURE_KEY, "Encountered Bulbasaur! What will you do now?"),
     TupletCString(WEATHER_CITY_KEY, "St Pebblesburg"),
   };
 
@@ -113,7 +117,7 @@ static void window_unload(Window *window) {
 
 static void init(void) {
   s_main_window = window_create();
-  window_set_background_color(s_main_window, GColorBlack);
+  window_set_background_color(s_main_window, GColorWhite);
   window_set_fullscreen(s_main_window, true);
   window_set_window_handlers(s_main_window, (WindowHandlers) {
     .load = window_load,
