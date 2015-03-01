@@ -14,6 +14,13 @@ static GBitmap *icon_bitmap = NULL;
 static AppSync sync;
 static uint8_t sync_buffer[64];
 
+char strings[10][50] = {
+  "Encountered a wild Gengar!",
+  "Can't touch this... dun na na na",
+  "Fuck Yeah",
+  "i know where u live"
+};
+
 enum displayKeys {
   SPRITE_KEY = 0x0,         // TUPLE_INT
   ENCOUNTER_KEY = 0x1,  // TUPLE_CSTRING
@@ -79,10 +86,11 @@ static void window_load(Window *window) {
   text_layer_set_text(name_layer, test);
   layer_add_child(window_layer, text_layer_get_layer(name_layer));
 
+  
   Tuplet initial_values[] = {
     TupletInteger(SPRITE_KEY, (uint8_t) 0),
-    TupletCString(ENCOUNTER_KEY, "Encountered a wild Gengar!"),
-    TupletCString(NAME_KEY, "suuuup"),
+    TupletCString(ENCOUNTER_KEY, strings[3]),
+//     TupletCString(NAME_KEY, "suuuup"),
   };
   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
       sync_tuple_changed_callback, sync_error_callback, NULL);
@@ -101,6 +109,17 @@ static void window_unload(Window *window) {
   bitmap_layer_destroy(icon_layer);
 }
 
+static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(encounter_layer, strings[rand()%4]);
+}
+
+static void click_config_provider(void *context) {
+  // Register the ClickHandlers
+//   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+//   window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+  window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+}
+
 static void init() {
   window = window_create();
   window_set_background_color(window, GColorClear);
@@ -109,6 +128,8 @@ static void init() {
     .load = window_load,
     .unload = window_unload
   });
+  
+  window_set_click_config_provider(window, click_config_provider);
 
   // const int inbound_size = 64;
   // const int outbound_size = 16;
@@ -127,3 +148,4 @@ int main(void) {
   app_event_loop();
   deinit();
 }
+                  
