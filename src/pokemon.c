@@ -14,13 +14,13 @@ static GBitmap *icon_bitmap = NULL;
 static AppSync sync;
 static uint8_t sync_buffer[64];
 
-enum WeatherKey {
+enum displayKeys {
   SPRITE_KEY = 0x0,         // TUPLE_INT
   ENCOUNTER_KEY = 0x1,  // TUPLE_CSTRING
   NAME_KEY = 0x2,
 };
 
-static uint32_t WEATHER_ICONS[] = {
+static uint32_t picIcons[] = {
   RESOURCE_ID_gengar,
   RESOURCE_ID_gengar,
   RESOURCE_ID_bulbasaur,
@@ -38,7 +38,7 @@ static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tup
         gbitmap_destroy(icon_bitmap);
       }
 
-      icon_bitmap = gbitmap_create_with_resource(WEATHER_ICONS[new_tuple->value->uint8]);
+      icon_bitmap = gbitmap_create_with_resource(picIcons[new_tuple->value->uint8]);
       bitmap_layer_set_bitmap(icon_layer, icon_bitmap);
       break;
 
@@ -61,7 +61,7 @@ static void window_load(Window *window) {
   layer_add_child(window_layer, bitmap_layer_get_layer(icon_layer));
 
   // encounter_layer = text_layer_create(GRect(0, 80, 144, 25));
-  encounter_layer = text_layer_create(GRect(0, 80, 100, 25));
+  encounter_layer = text_layer_create(GRect(0, 80, 100, 50));
   text_layer_set_text_color(encounter_layer, GColorBlack);
   text_layer_set_background_color(encounter_layer, GColorWhite);
   //text_layer_set_font(encounter_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
@@ -71,7 +71,7 @@ static void window_load(Window *window) {
   layer_add_child(window_layer, text_layer_get_layer(encounter_layer));
 
   // name_layer = text_layer_create(GRect(0, 125, 144, 25));
-  name_layer = text_layer_create(GRect(0, 125, 130, 25));
+  name_layer = text_layer_create(GRect(0, 150, 130, 25));
   text_layer_set_text_color(name_layer, GColorWhite);
   text_layer_set_background_color(name_layer, GColorWhite);
   //text_layer_set_font(name_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
@@ -81,8 +81,8 @@ static void window_load(Window *window) {
 
   Tuplet initial_values[] = {
     TupletInteger(SPRITE_KEY, (uint8_t) 0),
-    TupletCString(ENCOUNTER_KEY, "Fuck Youa s s s d d s s s s s s"),
-    //TupletCString(NAME_KEY, "wild"),
+    TupletCString(ENCOUNTER_KEY, "Encountered a wild Gengar!"),
+    TupletCString(NAME_KEY, "suuuup"),
   };
   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
       sync_tuple_changed_callback, sync_error_callback, NULL);

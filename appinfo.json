@@ -10,8 +10,8 @@
     "resources": {
         "media": [
             {
-                "file": "images/gengar.png",
-                "name": "gengar",
+                "file": "images/bulbasaur.png",
+                "name": "bulbasaur",
                 "type": "png"
             },
             {
@@ -21,8 +21,8 @@
                 "type": "png"
             },
             {
-                "file": "images/bulbasaur.png",
-                "name": "bulbasaur",
+                "file": "images/gengar.png",
+                "name": "gengar",
                 "type": "png"
             }
         ]
