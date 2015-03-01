@@ -9,8 +9,7 @@ static WakeupId s_wakeup_id;
 
 void wakeup_handler(WakeupId id, int32_t reason) {
   // The app has woken! set new wake and print new time
-  
-  uint8_t newtime = (rand() % 15)+10;
+  uint8_t newtime = (rand() % 15)+30;
  
   //static char s_buffer[128];
 
@@ -27,12 +26,49 @@ void wakeup_handler(WakeupId id, int32_t reason) {
   
     s_wakeup_id = wakeup_schedule(future_time, WAKEUP_REASON, true);
     persist_write_int(PERSIST_KEY_WAKEUP_ID, s_wakeup_id);
-  
-  //VIBRATE!!!
-  vibes_double_pulse();
-  
   // Delete the ID
   persist_delete(PERSIST_KEY_WAKEUP_ID);
+    
+  if (launch_reason() == APP_LAUNCH_WAKEUP) {
+    
+    strcpy(str, "ENCOUNTERED BITCH");
+    
+      if (s_icon_bitmap) {
+        gbitmap_destroy(s_icon_bitmap);
+      }
+      int rand_val = rand() % 1;
+      s_icon_bitmap = gbitmap_create_with_resource(POKEMON_ICONS[rand_val]);
+      if(s_icon_bitmap != NULL)
+      {
+      bitmap_layer_set_bitmap(s_image_layer, s_icon_bitmap);
+      text_layer_set_text(s_output_layer, str);
+      }
+      else
+      {
+      printf("it was null??? why????");
+      }
+    
+    printf("asdfasdfasdfasdfasdfa");
+     //VIBRATE!!!
+    vibes_double_pulse();
+  }
+  
+  
+  
+  
+  else{
+    strcpy(str, "no pokemon here :(");
+
+      if (s_icon_bitmap) {
+        gbitmap_destroy(s_icon_bitmap);
+      }
+
+      int rand_val = rand() % 1;
+    
+      text_layer_set_text(s_output_layer, str);
+    
+  }
+
 }
 
 // static void check_wakeup() {

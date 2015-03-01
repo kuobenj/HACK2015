@@ -17,16 +17,17 @@ void window_load(Window *window) {
   GRect window_bounds = layer_get_bounds(window_layer);
 
   // Create output TextLayer
-  s_output_layer = text_layer_create(GRect(0, 0, window_bounds.size.w, window_bounds.size.h));
+  s_output_layer = text_layer_create(GRect(0, 0, 144, 168));
   text_layer_set_text_alignment(s_output_layer, GTextAlignmentCenter);
-  text_layer_set_text(s_output_layer, str);
+  //text_layer_set_text(s_output_layer, str);
   layer_add_child(window_layer, text_layer_get_layer(s_output_layer));
   
     // Create image layer
-  s_image_layer =  bitmap_layer_create(GRect(0, 0, window_bounds.size.w, window_bounds.size.h));
+  s_image_layer =  bitmap_layer_create(GRect(0, 50, 144, 60));
   bitmap_layer_set_background_color(s_image_layer, GColorClear);
   bitmap_layer_set_compositing_mode(s_image_layer, GCompOpClear);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_image_layer));
+  printf("does the window load?");
 }
 static void window_unload(Window *window) {
   // Destroy output TextLayer

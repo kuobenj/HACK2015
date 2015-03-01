@@ -10,6 +10,11 @@
     "resources": {
         "media": [
             {
+                "file": "images/vulpix.png",
+                "name": "vulpix",
+                "type": "png"
+            },
+            {
                 "file": "images/0.png",
                 "name": "BULBASAUR",
                 "type": "png-trans"
